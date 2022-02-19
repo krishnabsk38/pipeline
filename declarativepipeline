@@ -1,0 +1,40 @@
+pipeline{
+    tools{
+        jdk 'myjava'
+        maven 'mymaven'
+    }
+    agent any
+    stages{
+        stage('clonerepo'){
+        steps{
+            git 'https://github.com/krishnabsk38/DevOpsClassCodes.git'
+        }
+    }
+        stage('compile'){
+        steps{
+            sh 'mvn compile'
+        }
+    }
+    stage('codereview'){
+        steps{
+            sh 'mvn pmd:pmd'
+        }
+    }
+    stage('unittest'){
+        steps{
+            sh 'mvn test'
+        }
+    }
+    stage('codecoverage'){
+        steps{
+            sh 'mvn cobertura:cobertura -Dcobertura.report,format=xml'
+        
+        }
+    }
+    stage('package'){
+        steps{
+            sh 'mvn package'
+        }
+    }
+    }
+}
